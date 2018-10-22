@@ -1,4 +1,5 @@
 import numpy as np
+import softmax
 
 def rnn_cell_forward(a_prev, xt, parameters):
     """
@@ -107,5 +108,7 @@ def rnn_backward(da, caches):
 def rnn_y_forward(a_n, parameters):
     Way = parameters["Way"]
     by = paramters["by"]
+    
+    
             
     
