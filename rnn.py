@@ -105,9 +105,51 @@ def rnn_backward(da, caches):
         da_prevt = gradients["da_prev"]
     return {"dWax" : dWax, "dWaa" : dWaa, "dba" : dba}
         
-def rnn_y_forward(a_n, parameters):
+def rnn_y_forward(a, parameters):
+    """
+    Caclculate y from an
+
+    Parameters:
+    a: an, the output of the last cell in rnn net (n_a, m)
+    parameters: contain Way and by
+    Return:
+    y: prediction result (n_y, m)
+    cache: values used in calculating the derivatives in backward pass
+    """
     Way = parameters["Way"]
     by = paramters["by"]
+    tanh = np.tanh(np.dot(Way, a) + by)
+    y = softmax.calc(tanh)
+    cache = (a, tanh, y, parameters)
+    return y, cache
+
+def rnn_y_backward(dy, cache):
+    """
+    Calculate the derivatives of J w.r.t Way, by, an
+
+    Parameters:
+    dy: DJ/Dy
+    cache: cache returned by rnn_y_forward
+    Return: dWay: DJ/DWay
+            dby: DJ/Dby
+            da: DJ/Da
+    """
+    # dy is DJ/Dy
+    # dy shape is 3, m
+    a, tanh, y, parameters = cache
+    Way = parameters["Way"]
+    by = paramters["by"]
+    # DJ/Da
+    dtanh = dy * softmax.derivative(y)
+    # temporary derivative used to calculate dWay, dby and da
+    # dtanh shape is 3, m
+    dtanh = dtanh * (1 - tanh**2)
+    dWay = np.dot(dtand, a.T)
+    dby = np.sum(dtanh, axis=1, keepsdim=True)
+    da = np.dot(Way.T, dtanh)
+    return {"dWay" : dWay, "dby" : dby, "da" : da}
+    
+    
     
     
             
