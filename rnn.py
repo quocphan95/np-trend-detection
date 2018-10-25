@@ -16,7 +16,6 @@ def rnn_cell_forward(a_prev, xt, parameters):
     Wax = parameters["Wax"]
     Waa = parameters["Waa"]
     ba = parameters["ba"]
-
     a_next = np.tanh(np.dot(Wax, xt) + np.dot(Waa, a_prev) + ba)
     cache = (a_prev, a_next, xt, parameters)
     return a_next, cache
@@ -43,6 +42,7 @@ def rnn_forward(a0, X, parameters):
         a_next, cache = rnn_cell_forward(a_prev, X[:, :, t], parameters)
         a[:, :, t] = a_next
         caches = caches + [cache]
+        a_prev = a_next
     return a, caches
 
 def rnn_cell_backward(da_next, cache):
@@ -65,7 +65,7 @@ def rnn_cell_backward(da_next, cache):
     Waa = parameters["Waa"]
     ba = parameters["ba"]
     # use chain rule to calculate DJ/DWax(t), DJ/DWaa(t), Dj/Dba(t)
-    dtanh = da_next * (1 - a_next ** 2) 
+    dtanh = da_next * (1 - a_next ** 2)
     dWax = np.dot(dtanh, xt.T)
     dWaa = np.dot(dtanh, a_prev.T)
     dba = np.sum(dtanh, axis=1, keepdims = True)

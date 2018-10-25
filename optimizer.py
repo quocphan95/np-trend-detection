@@ -31,12 +31,12 @@ class GradientDescentOptimizer:
                 a, caches = rnn_forward(self.a0, batch_x, self.parameters)
                 a_last = a[:, :, -1]
                 yhat, cache_y = rnn_y_forward(a_last, self.parameters)
-                J = np.sum(-batch_y * np.log(yhat))
+                J = 1 / batch_size * np.sum(-batch_y * np.log(yhat))
                 # print result here
                 if print_costs:
                     print("Epoch {0:>4}, iter {1:>8}, J = {2:>.4}".format(e, batch_number, J))
                 # backward propagation
-                d_ay = yhat - batch_y
+                d_ay = 1 / batch_size * (yhat - batch_y)
                 gradients_y = rnn_y_backward(d_ay, cache_y)
                 gradients = rnn_backward(gradients_y["da"], caches)
                 # update parameters
