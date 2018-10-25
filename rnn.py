@@ -123,12 +123,12 @@ def rnn_y_forward(a, parameters):
     cache = (a, tanh, y, parameters)
     return y, cache
 
-def rnn_y_backward(dy, cache):
+def rnn_y_backward(d_ay, cache):
     """
     Calculate the derivatives of J w.r.t Way, by, an
 
     Parameters:
-    dy: DJ/Dy
+    d_ay: Upstream derivative w.r.t a (output of y layer)
     cache: cache returned by rnn_y_forward
     Return: dWay: DJ/DWay
             dby: DJ/Dby
@@ -136,17 +136,14 @@ def rnn_y_backward(dy, cache):
     """
     # dy is DJ/Dy
     # dy shape is 3, m
+    # a is input of y layer (output of the last rnn cell)
     a, tanh, y, parameters = cache
     Way = parameters["Way"]
     by = paramters["by"]
-    # DJ/Da
-    dtanh = dy * softmax.derivative(y)
-    # temporary derivative used to calculate dWay, dby and da
-    # dtanh shape is 3, m
-    dtanh = dtanh * (1 - tanh**2)
-    dWay = np.dot(dtand, a.T)
-    dby = np.sum(dtanh, axis=1, keepsdim=True)
-    da = np.dot(Way.T, dtanh)
+    dz = d_ay * (1 - tanh**2)
+    dWay = np.dot(dz, a.T)
+    dby = np.sum(dz, axis=1, keepsdim=True)
+    da = np.dot(Way.T, dz)
     return {"dWay" : dWay, "dby" : dby, "da" : da}
     
     
