@@ -35,12 +35,12 @@ def rnn_forward(a0, X, parameters):
     """
     # X.shape = (nx, m, Tx)
     n_a, m = a0.shape
-    (Tx, m) = X.shape
+    (nx, m, Tx) = X.shape
     a = np.zeros((n_a, m, Tx))
     caches = []
     a_prev = a0
     for t in range(Tx):
-        a_next, cache = rnn_cell_fordward(a_prev, X[:, :, t])
+        a_next, cache = rnn_cell_forward(a_prev, X[:, :, t], parameters)
         a[:, :, t] = a_next
         caches = caches + [cache]
     return a, caches
@@ -111,26 +111,26 @@ def rnn_y_forward(a, parameters):
 
     Parameters:
     a: an, the output of the last cell in rnn net (n_a, m)
-    parameters: contain Way and by
+    parameters: contain Wya and by
     Return:
     y: prediction result (n_y, m)
     cache: values used in calculating the derivatives in backward pass
     """
-    Way = parameters["Way"]
-    by = paramters["by"]
-    tanh = np.tanh(np.dot(Way, a) + by)
+    Wya = parameters["Wya"]
+    by = parameters["by"]
+    tanh = np.tanh(np.dot(Wya, a) + by)
     y = softmax.calc(tanh)
     cache = (a, tanh, y, parameters)
     return y, cache
 
 def rnn_y_backward(d_ay, cache):
     """
-    Calculate the derivatives of J w.r.t Way, by, an
+    Calculate the derivatives of J w.r.t Wya, by, an
 
     Parameters:
     d_ay: Upstream derivative w.r.t a (output of y layer)
     cache: cache returned by rnn_y_forward
-    Return: dWay: DJ/DWay
+    Return: dWya: DJ/DWya
             dby: DJ/Dby
             da: DJ/Da
     """
@@ -138,13 +138,13 @@ def rnn_y_backward(d_ay, cache):
     # dy shape is 3, m
     # a is input of y layer (output of the last rnn cell)
     a, tanh, y, parameters = cache
-    Way = parameters["Way"]
-    by = paramters["by"]
+    Wya = parameters["Wya"]
+    by = parameters["by"]
     dz = d_ay * (1 - tanh**2)
-    dWay = np.dot(dz, a.T)
-    dby = np.sum(dz, axis=1, keepsdim=True)
-    da = np.dot(Way.T, dz)
-    return {"dWay" : dWay, "dby" : dby, "da" : da}
+    dWya = np.dot(dz, a.T)
+    dby = np.sum(dz, axis=1, keepdims=True)
+    da = np.dot(Wya.T, dz)
+    return {"dWya" : dWya, "dby" : dby, "da" : da}
     
     
     

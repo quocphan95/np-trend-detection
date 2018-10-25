@@ -14,15 +14,5 @@ def calc(x):
     softmaxt values of shape (n_x, m)
     """
     z = np.exp(x)
-    return z / np.sum(z, axis=1, Keepdims=True)
-
-def derivative(p):
-    """
-    Calculate the derivative of the softmaxt function w.r.t x
-
-    Parameters:
-    p: Output of the softmax function (n_x, m)
-    Return:
-    Dsoftmax/Dx shape = (n_x, m)
-    """
-    return p * (1 - p)
+    ret = z / np.sum(z, axis=1, keepdims=True)
+    return ret
