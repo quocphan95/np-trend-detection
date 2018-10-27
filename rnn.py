@@ -1,5 +1,6 @@
 import numpy as np
 import softmax
+import activations as acts
 
 def rnn_cell_forward(a_prev, xt, parameters):
     """

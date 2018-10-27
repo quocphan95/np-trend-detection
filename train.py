@@ -17,7 +17,7 @@ if __name__ == "__main__":
         Y[int(Y_index[i]), i] = 1
 
     optimizer = GradientDescentOptimizer(0.01, 1, 10, 3, 20, 8000)
-    optimizer.fit(X,Y, 100, 10, True)
+    optimizer.fit(X,Y, 8000, 10, True)
 
     
     
