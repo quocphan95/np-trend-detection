@@ -14,5 +14,5 @@ def calc(x):
     softmaxt values of shape (n_x, m)
     """
     z = np.exp(x)
-    ret = z / np.sum(z, axis=1, keepdims=True)
+    ret = z / np.sum(z, axis=0, keepdims=True)
     return ret

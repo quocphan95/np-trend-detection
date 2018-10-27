@@ -1,6 +1,7 @@
 import numpy as np
 import softmax
 import activations as acts
+import pprint
 
 def rnn_cell_forward(a_prev, xt, parameters):
     """
@@ -18,6 +19,8 @@ def rnn_cell_forward(a_prev, xt, parameters):
     Waa = parameters["Waa"]
     ba = parameters["ba"]
     a_next = np.tanh(np.dot(Wax, xt) + np.dot(Waa, a_prev) + ba)
+    #pprint.pprint(a_prev)
+    #print("============")
     cache = (a_prev, a_next, xt, parameters)
     return a_next, cache
 

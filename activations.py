@@ -1,10 +1,22 @@
 import numpy as np
 
-def relu(x):
-    return (x>0).astype(np.int32) * x
+class Relu:
+    @classmethod
+    def calc(x):
+        return (x>0).astype(np.int32) * x
+    
+    @classmethod
+    def derivative(x):
+        return (x>0).astype(np.int32)
+    
+class Tanh:
+    @classmethod
+    def calc(x):
+        return np.tanh(x)
 
-def relu_derivative(y):
-    return (y>0).astype(np.int32)
+    @classmethod
+    def derivative(x):
+        return (1 - Tanh.calc(x)**2)
 
 if __name__ == "__main__":
     x = np.random.randn(3,3)

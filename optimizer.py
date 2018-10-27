@@ -10,10 +10,10 @@ class GradientDescentOptimizer:
         self.Tx = Tx
         self.m = m
         self.parameters = {
-                "Wax" : np.random.rand(self.na, self.nx),
-                "Waa" : np.random.rand(self.na, self.na),
+                "Wax" : np.random.randn(self.na, self.nx),
+                "Waa" : np.random.randn(self.na, self.na),
                 "ba"  : np.zeros((na, 1)),
-                "Wya" : np.random.rand(self.ny, self.na),
+                "Wya" : np.random.randn(self.ny, self.na),
                 "by"  : np.zeros((ny, 1))
             }
     def change_lr(self, new_lr):
@@ -32,6 +32,7 @@ class GradientDescentOptimizer:
                 a_last = a[:, :, -1]
                 yhat, cache_y = rnn_y_forward(a_last, self.parameters)
                 J = 1 / batch_size * np.sum(-batch_y * np.log(yhat))
+                #print(-batch_y * np.log(yhat))
                 # print result here
                 if print_costs:
                     print("Epoch {0:>4}, iter {1:>8}, J = {2:>.4}".format(e, batch_number, J))
