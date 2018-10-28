@@ -18,9 +18,9 @@ chmod u+x init.sh
 ```
 - Create the traing set
 ```
-python3 training/train.py
+python3 training/generate.py
 ```
 - Run the training script (main.py)
 
 ## Contributing
-- quoc.pp.1995
+- quocphan95
