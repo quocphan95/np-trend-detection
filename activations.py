@@ -1,5 +1,12 @@
 import numpy as np
 
+"""
+Activation functions
+
+Each class contains 2 class function:
+calc: calculate the output from the input
+derivative: calculate the derivative of the output w.r.t the input
+"""
 class Relu:
     @classmethod
     def calc(x):

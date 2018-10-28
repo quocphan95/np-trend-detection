@@ -2,7 +2,23 @@ import numpy as np
 from rnn import *
 
 class GradientDescentOptimizer:
+    """
+    Implement the GD algorithim
+    """
     def __init__(self, lr, nx, na, ny, Tx, m):
+        """
+        Init the optimizer
+
+        Parameters:
+        lr: learning rate alpha
+        nx: dimmension of input nx
+        na: dimmension of hidden states na
+        ny: dimmension of output y (is 3 in this problem)
+        Tx: the length of the x sequence Tx
+        m: size of training set
+        Return:
+        the optimizer object
+        """
         self.lr = lr
         self.nx = nx
         self.na = na
@@ -16,10 +32,21 @@ class GradientDescentOptimizer:
                 "Wya" : np.random.randn(self.ny, self.na),
                 "by"  : np.zeros((ny, 1))
             }
-    def change_lr(self, new_lr):
-        self.lr = lr
 
-    def fit(self, X, Y, batch_size, epoch, print_costs=False): 
+    def fit(self, X, Y, batch_size, epoch, print_costs=False):
+        """
+        Train the model with given data
+
+        Parameters:
+        X: the input of shape(nx, m)
+        Y: the labels of training examples
+        batch_size: batch size (<m)
+        epoch: number of epoch to optimize
+        print_costs: print the cost after each time the parameters is updated
+        
+        Return:
+        The dictionary contains the trained parameters
+        """
         # X (nx, m, Tx)
         self.a0 = np.zeros((self.na, batch_size))
         for e in range(epoch):
@@ -46,7 +73,7 @@ class GradientDescentOptimizer:
                 self.parameters["ba"]  = self.parameters["ba"]  - self.lr * gradients["dba"]
                 self.parameters["Wya"] = self.parameters["Wya"] - self.lr * gradients_y["dWya"]
                 self.parameters["by"]  = self.parameters["by"]  - self.lr * gradients_y["dby"]
-                
+        return self.parameters
                 
                 
             

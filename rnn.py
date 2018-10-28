@@ -19,8 +19,6 @@ def rnn_cell_forward(a_prev, xt, parameters):
     Waa = parameters["Waa"]
     ba = parameters["ba"]
     a_next = np.tanh(np.dot(Wax, xt) + np.dot(Waa, a_prev) + ba)
-    #pprint.pprint(a_prev)
-    #print("============")
     cache = (a_prev, a_next, xt, parameters)
     return a_next, cache
 
@@ -149,7 +147,24 @@ def rnn_y_backward(d_ay, cache):
     dby = np.sum(dz, axis=1, keepdims=True)
     da = np.dot(Wya.T, dz)
     return {"dWya" : dWya, "dby" : dby, "da" : da}
-    
+
+def predict(X, parameters):
+    """
+    Predict the trends of arrays
+
+    Parameters:
+    X: the input arrays of shape (nx, m, Tx)
+    parameters: dictionary contain the trained parameters
+    Return:
+    The trends of all arrays y_predict of shape (1, m)
+    """
+    nx, m, Tx = X.shape
+    na, nx = parameters["Wax"].shape
+    a0 = np.zeros((na, m))
+    a, caches = rnn_forward(a0, X, parameters)
+    yhat, cache_y = rnn_y_forward(a[:, :, -1], parameters)
+    y_predict = np.argmax(yhat, axis=0)
+    return y_predict
     
     
     
